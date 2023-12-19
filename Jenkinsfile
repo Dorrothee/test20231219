@@ -1,7 +1,5 @@
 pipeline {
-  agent {
-    label 'docker' 
-  }
+  agent any
   stages {
     /*stage ('Build') {
         agent {
@@ -17,7 +15,7 @@ pipeline {
     stage ('Build and Test') {
         agent {
 	  docker {
-              image 'alpine'
+              image 'maven:3.9.5'
               args '-u=root'
           }
         }
