@@ -32,9 +32,9 @@ pipeline {
 	}
         stage('Deploy'){
             steps {
-                sh "docker stop ${DOCKER_IMAGE} | true"
-                sh "docker rm ${DOCKER_IMAGE} | true"
-                sh "docker run --name ${DOCKER_IMAGE} -it cauliflower413/${DOCKER_IMAGE}:${TAG}"
+                bat "docker stop ${DOCKER_IMAGE} | true"
+                bat "docker rm ${DOCKER_IMAGE} | true"
+                bat "docker run --name ${DOCKER_IMAGE} -it cauliflower413/${DOCKER_IMAGE}:${TAG}"
             }
         }
     }
