@@ -1,7 +1,7 @@
-pipeline {
+/*pipeline {
   agent any
   stages {
-    /*stage ('Build') {
+    //stage ('Build') {
         agent {
 	  docker {
               image 'maven:3.9.5'
@@ -11,7 +11,7 @@ pipeline {
         steps {
           sh 'mvn clean install'
         }
-      }*/
+      //}
     stage ('Build and Test') {
         agent {
 	  docker {
@@ -40,4 +40,41 @@ pipeline {
       }
     }
   }
+}*/
+
+
+pipeline {
+    agent any
+    tools {
+        maven 'maven-3.9.5' 
+    }
+    environment {
+        DATE = new Date().format('yy.M')
+        TAG = "${DATE}.${BUILD_NUMBER}"
+    }
+    stages {
+        stage ('Build') {
+            steps {
+                bat 'mvn clean install'
+		bat 'mvn clean test'
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                script {
+                    docker.build("cauliflower413/jenkinsTest:${TAG}")
+                }
+            }
+        }
+	    stage('Pushing Docker Image to Dockerhub') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker_credential') {
+                        docker.image("cauliflower413/jenkinsTest:${TAG}").push()
+                        docker.image("cauliflower413/jenkinsTest:${TAG}:${TAG}").push("latest")
+                    }
+                }
+            }
+        }
+    }
 }
