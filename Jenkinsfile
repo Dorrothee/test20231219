@@ -59,8 +59,8 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    //docker.build("cauliflower413/jenkinsTest:${TAG}")
-		    bat 'docker build -t testJenkins:latest .'
+                    docker.build("cauliflower413/jenkinsTest:${TAG}")
+		    //bat 'docker build -t testJenkins:latest .'
                 }
             }
         }
