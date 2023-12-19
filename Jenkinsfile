@@ -32,7 +32,7 @@ pipeline {
 	}
         stage('Deploy'){
             steps {
-                bat "docker run --name ${DOCKER_IMAGE} -it cauliflower413/${DOCKER_IMAGE}:${TAG}"
+                bat "winpty docker run --name ${DOCKER_IMAGE} -it cauliflower413/${DOCKER_IMAGE}:${TAG}"
             }
         }
     }
