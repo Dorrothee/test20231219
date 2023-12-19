@@ -46,7 +46,7 @@
 pipeline {
     agent any
     tools {
-        maven 'maven-3.9.5' 
+        maven 'maven:3.9.5' 
     }
     environment {
         DATE = new Date().format('yy.M')
