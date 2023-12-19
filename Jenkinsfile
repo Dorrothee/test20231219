@@ -10,7 +10,7 @@ pipeline {
         stage ('Build and Test Project') {
             steps {
                 bat 'mvn clean install'
-		bat 'mvn clean test'
+		//bat 'mvn test'
             }
         }
         stage('Docker Build') {
