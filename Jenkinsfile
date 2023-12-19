@@ -49,6 +49,7 @@ pipeline {
         DATE = new Date().format('yy.M')
         TAG = "${DATE}.${BUILD_NUMBER}"
 	DOCKER_IMAGE = 'jenkins-lab'
+	REPO_NAME = 'test20231219:v.1'
     }
     stages {
         stage ('Build and Test Project') {
@@ -61,7 +62,6 @@ pipeline {
             steps {
                 script {
                     docker.build("cauliflower413/${DOCKER_IMAGE}:${TAG}")
-		    //bat 'docker build -t ${DOCKER_IMAGE} :latest .'
                 }
             }
         }
@@ -70,7 +70,7 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
         	    bat "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-                    bat 'docker push ${DOCKER_IMAGE}'
+                    bat 'docker push ${DOCKER_IMAGE}/${REPO_NAME}'
                     }
                 }
             }
