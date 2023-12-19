@@ -1,3 +1,4 @@
 FROM openjdk:17
-COPY target/test-1.0-SNAPSHOT.jar app.jar
-CMD ["java", "-jar", "/app.jar"]
+WORKDIR app
+COPY . app/Main.jar
+CMD ["java", "-jar", "Main.jar"]
