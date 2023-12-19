@@ -24,14 +24,15 @@ pipeline {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerHub') {
                         docker.image("cauliflower413/${DOCKER_IMAGE}:${TAG}").push("latest")
+			docker.image("cauliflower413/${DOCKER_IMAGE}:${TAG}").pull()
                     }
                 }
             }
 	}
-        stage('Deploy'){
+        /*stage('Deploy'){
             steps {
                 bat 'docker run --name ${DOCKER_IMAGE} -it cauliflower413/${DOCKER_IMAGE}:${TAG}'
             }
-        }
+        }*/
     }
 }
