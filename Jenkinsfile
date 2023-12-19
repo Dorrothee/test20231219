@@ -48,8 +48,8 @@ pipeline {
     environment {
         DATE = new Date().format('yy.M')
         TAG = "${DATE}.${BUILD_NUMBER}"
-	DOCKER_IMAGE = 'jenkins-lab'
-	REPO_NAME = 'test20231219:v.1'
+	DOCKER_IMAGE = 'jenkins-img'
+	DOCKER_CONTAINER = 'jenkins-cnt'
     }
     stages {
         stage ('Build and Test Project') {
@@ -70,18 +70,10 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
         	    bat "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-                    bat 'docker push ${DOCKER_IMAGE}/${REPO_NAME.toLowerCase()}'
+                    bat 'docker push cauliflower413/${DOCKER_CONTAINER}}'
                     }
                 }
             }
         }
     }
 }
-
-/*def DOCKER_IMAGE = 'anne738/my-repo'
-                    sh "docker build -t ${DOCKER_IMAGE} -f Dockerfile ."
-
-                    withCredentials([usernamePassword(credentialsId: 'LandPDOCKER', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-                    sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
-                    }
-                    sh "docker push ${DOCKER_IMAGE}"*/
