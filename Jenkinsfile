@@ -15,7 +15,8 @@ pipeline {
     stage ('Build and Test') {
         agent {
 	  docker {
-              image 'openjdk:17'
+              image 'harbor-repo.vmware.com/dockerhub-proxy-cache/library/adoptopenjdk/openjdk17:latest'
+	      args '-v $HOME/.m2:/tmp/jenkins-home/.m2'
           }
         }
         steps {
