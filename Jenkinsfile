@@ -6,7 +6,7 @@ pipeline {
                 checkout scm
             }
         }
-    stage ('Build') {
+    /*stage ('Build') {
         agent {
 	  docker {
               image 'maven:3.9.5'
@@ -16,8 +16,8 @@ pipeline {
         steps {
           sh 'mvn clean install'
         }
-      }
-    stage ('Test') {
+      }*/
+    stage ('Build and Test') {
         agent {
 	  docker {
               image 'maven:3.9.5'
@@ -25,6 +25,7 @@ pipeline {
           }
         }
         steps {
+	  sh 'mvn clean install'
           sh 'mvn clean test'
         }
       }
