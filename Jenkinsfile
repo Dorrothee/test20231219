@@ -20,22 +20,22 @@ pipeline {
           }
         }
         steps {
-	  sh 'mvn clean install'
-          sh 'mvn clean test'
+	  bat 'mvn clean install'
+          bat 'mvn clean test'
         }
       }
     stage('Docker Build') {
     	agent any
       steps {
-      	sh 'docker build -t testJenkins:latest .'
+      	bat 'docker build -t testJenkins:latest .'
       }
     }
     stage('Docker Push') {
     	agent any
       steps {
       	withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-        	sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-          sh 'docker push testJenkins:latest'
+        	bat "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+          bat 'docker push testJenkins:latest'
         }
       }
     }
