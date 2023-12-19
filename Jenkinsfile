@@ -30,12 +30,7 @@ pipeline {
 	}
         stage('Deploy'){
             steps {
-                //bat "docker run --name ${DOCKER_IMAGE} -it cauliflower413/${DOCKER_IMAGE}:${TAG}"
-		    script {
-                    docker.image("cauliflower413/${DOCKER_IMAGE}:${TAG}").pull()
-
-                    dockerContainer = dockerImage.run("--name ${DOCKER_IMAGE} -it").stop()
-                }
+                bat "docker run --name ${DOCKER_IMAGE} -it cauliflower413/${DOCKER_IMAGE}:${TAG}"
             }
         }
     }
