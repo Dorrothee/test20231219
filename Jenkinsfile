@@ -3,8 +3,8 @@ pipeline {
     environment {
         DATE = new Date().format('yy.M')
         TAG = "${DATE}.${BUILD_NUMBER}"
-	DOCKER_IMAGE = 'jenkins-img'
-	DOCKER_CONTAINER = 'jenkins-cnt'
+	DOCKER_IMAGE = 'test-img'
+	DOCKER_CONTAINER = 'test-cnt'
     }
     stages {
         stage ('Build and Test Project') {
