@@ -17,18 +17,17 @@ pipeline {
           sh 'mvn clean install'
         }
       }
-    stage('Test') {
-	    agent {
+    stage ('Test') {
+        agent {
 	  docker {
               image 'maven:3.9.5'
               args '-u=\"root\"'
           }
         }
-            steps {
-                // Build and test the Maven project
-                sh 'mvn clean test'
-            }
+        steps {
+          sh 'mvn clean test'
         }
+      }
     stage('Docker Build') {
     	agent any
       steps {
