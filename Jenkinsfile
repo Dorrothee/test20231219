@@ -1,55 +1,10 @@
-/*pipeline {
-  agent any
-  stages {
-    //stage ('Build') {
-        agent {
-	  docker {
-              image 'maven:3.9.5'
-              args '-u=\"root\"'
-          }
-        }
-        steps {
-          sh 'mvn clean install'
-        }
-      //}
-    stage ('Build and Test') {
-        agent {
-	  docker {
-              image 'openjdk:17'
-	      args '-u=root'
-          }
-        }
-        steps {
-	  bat 'mvn clean install'
-          bat 'mvn clean test'
-        }
-      }
-    stage('Docker Build') {
-    	agent any
-      steps {
-      	bat 'docker build -t testJenkins:latest .'
-      }
-    }
-    stage('Docker Push') {
-    	agent any
-      steps {
-      	withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-        	bat "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-          bat 'docker push testJenkins:latest'
-        }
-      }
-    }
-  }
-}*/
-
-
 pipeline {
     agent any
     environment {
         DATE = new Date().format('yy.M')
         TAG = "${DATE}.${BUILD_NUMBER}"
-	DOCKER_IMAGE = 'jenkins-img'
-	DOCKER_CONTAINER = 'jenkins-cnt'
+	DOCKER_IMAGE = 'test-img'
+	DOCKER_CONTAINER = 'test-cnt'
     }
     stages {
         stage ('Build and Test Project') {
@@ -65,23 +20,19 @@ pipeline {
                 }
             }
         }
-	    stage('Pushing Docker Image to Dockerhub') {
+	stage('Pushing Docker Image to Dockerhub') {
 	    steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerHub') {
-                        docker.image("cauliflower413/${DOCKER_IMAGE}:${TAG}").push()
                         docker.image("cauliflower413/${DOCKER_IMAGE}:${TAG}").push("latest")
                     }
                 }
             }
-            /*steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-        	    bat "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-                    bat 'docker push cauliflower413/${DOCKER_IMAGE}:${TAG}'
-                    }
-                }
-            }*/
-        }
+	}
+        /*stage('Deploy'){
+            steps {
+                bat "winpty docker run --name ${DOCKER_IMAGE} -it cauliflower413/${DOCKER_IMAGE}:${TAG}"
+            }
+        }*/
     }
 }
