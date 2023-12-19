@@ -59,16 +59,17 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    docker.build("cauliflower413/jenkinsTest:${TAG}")
+                    //docker.build("cauliflower413/jenkinsTest:${TAG}")
+		    bat 'docker build -t testJenkins:latest .'
                 }
             }
         }
 	    stage('Pushing Docker Image to Dockerhub') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker_credential') {
-                        docker.image("cauliflower413/jenkinsTest:${TAG}").push()
-                        docker.image("cauliflower413/jenkinsTest:${TAG}:${TAG}").push("latest")
+                    withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+        	    bat "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+                    bat 'docker push testJenkins:latest'
                     }
                 }
             }
