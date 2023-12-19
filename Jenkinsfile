@@ -48,9 +48,10 @@ pipeline {
     environment {
         DATE = new Date().format('yy.M')
         TAG = "${DATE}.${BUILD_NUMBER}"
+	DOCKER_IMAGE = 'jenkins-lab'
     }
     stages {
-        stage ('Build') {
+        stage ('Build and Test Project') {
             steps {
                 bat 'mvn clean install'
 		bat 'mvn clean test'
@@ -59,8 +60,8 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    docker.build("cauliflower413/jenkinsTest:${TAG}")
-		    //bat 'docker build -t testJenkins:latest .'
+                    docker.build("cauliflower413/${IMAGE_NAME}:${TAG}")
+		    //bat 'docker build -t ${DOCKER_IMAGE} :latest .'
                 }
             }
         }
@@ -76,3 +77,11 @@ pipeline {
         }
     }
 }
+
+/*def DOCKER_IMAGE = 'anne738/my-repo'
+                    sh "docker build -t ${DOCKER_IMAGE} -f Dockerfile ."
+
+                    withCredentials([usernamePassword(credentialsId: 'LandPDOCKER', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                    sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
+                    }
+                    sh "docker push ${DOCKER_IMAGE}"*/
