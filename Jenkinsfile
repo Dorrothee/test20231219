@@ -3,8 +3,7 @@ pipeline {
     environment {
         DATE = new Date().format('yy.M')
         TAG = "${DATE}.${BUILD_NUMBER}"
-	DOCKER_IMAGE = 'test-img'
-	DOCKER_CONTAINER = 'test-cnt'
+	DOCKER_IMAGE = 'img'
     }
     stages {
         stage ('Build and Test Project') {
@@ -29,10 +28,15 @@ pipeline {
                 }
             }
 	}
-        /*stage('Deploy'){
+        stage('Deploy'){
             steps {
-                bat "winpty docker run --name ${DOCKER_IMAGE} -it cauliflower413/${DOCKER_IMAGE}:${TAG}"
+                //bat "docker run --name ${DOCKER_IMAGE} -it cauliflower413/${DOCKER_IMAGE}:${TAG}"
+		    script {
+                    docker.image("cauliflower413/${DOCKER_IMAGE}:${TAG}").pull()
+
+                    dockerContainer = dockerImage.run("--name ${DOCKER_IMAGE} -it").stop()
+                }
             }
-        }*/
+        }
     }
 }
