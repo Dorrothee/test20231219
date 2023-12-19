@@ -60,7 +60,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    docker.build("cauliflower413/${IMAGE_NAME}:${TAG}")
+                    docker.build("cauliflower413/${DOCKER_IMAGE}:${TAG}")
 		    //bat 'docker build -t ${DOCKER_IMAGE} :latest .'
                 }
             }
