@@ -15,7 +15,7 @@ pipeline {
     stage ('Build and Test') {
         agent {
 	  docker {
-              image 'maven:3.9.5'
+              image 'alpine'
               args '-u=root'
           }
         }
