@@ -32,8 +32,6 @@ pipeline {
 	}
         stage('Deploy'){
             steps {
-                bat "docker stop ${DOCKER_IMAGE}"
-                bat "docker rm ${DOCKER_IMAGE}"
                 bat "docker run --name ${DOCKER_IMAGE} -it cauliflower413/${DOCKER_IMAGE}:${TAG}"
             }
         }
