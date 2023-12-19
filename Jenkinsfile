@@ -1,22 +1,29 @@
 pipeline {
-	agent none
+	agent any
   stages {
     stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-  	stage('Maven Install') {
-    	agent {
-      	docker {
-        	image 'maven:3.9.5'
+    stage ('Build') {
+        agent {
+	  docker {
+              image 'maven:3.9.5'
+              args '-u=\"root\"'
+          }
+        }
+        steps {
+          sh 'mvn clean install'
         }
       }
-      steps {
-      	sh 'mvn clean install'
-      }
-    }
-    stage('Build and Test') {
+    stage('Test') {
+	    agent {
+	  docker {
+              image 'maven:3.9.5'
+              args '-u=\"root\"'
+          }
+        }
             steps {
                 // Build and test the Maven project
                 sh 'mvn clean test'
