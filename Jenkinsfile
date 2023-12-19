@@ -70,7 +70,7 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
         	    bat "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-                    bat 'docker push cauliflower413/${DOCKER_CONTAINER}}'
+                    bat 'docker push cauliflower413/${DOCKER_IMAGE}:${TAG}'
                     }
                 }
             }
