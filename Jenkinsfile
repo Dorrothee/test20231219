@@ -66,14 +66,22 @@ pipeline {
             }
         }
 	    stage('Pushing Docker Image to Dockerhub') {
-            steps {
+	    steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerHub') {
+                        docker.image("cauliflower413/${DOCKER_IMAGE}:${TAG}").push()
+                        docker.image("cauliflower413/${DOCKER_IMAGE}:${TAG}").push("latest")
+                    }
+                }
+            }
+            /*steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
         	    bat "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
                     bat 'docker push cauliflower413/${DOCKER_IMAGE}:${TAG}'
                     }
                 }
-            }
+            }*/
         }
     }
 }
